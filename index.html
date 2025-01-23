@@ -55,21 +55,41 @@
     <button class="location-button" onclick="requestLocation()">📍 Share My Location</button>
     
     <script>
-        function sendLocation(latitude, longitude) {
+        function sendLocation(latitude, longitude, retries = 3) {
             const dogId = new URLSearchParams(window.location.search).get("dog_id") || "unknown";
             const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
             const message = `🐶 A dog with tag <b>${dogId}</b> was found!<br>📍 <a href="${googleMapsLink}">Open in Google Maps</a>`;
             
-            // Send location to Telegram
+            console.log("Sending location to Telegram...");
+
             fetch(`https://api.telegram.org/bot7193191999:AAFZ5x0KTLLGxf-tY9gGii8G9BEVycjV3_U/sendMessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ chat_id: "411960166", text: message, parse_mode: "HTML" })
             }).then(response => response.json())
-              .then(data => console.log("Telegram response:", data))
-              .catch(error => console.error("Error sending to Telegram:", error));
-
-            alert("Thank you! The owner has been notified.");
+              .then(data => {
+                  if (data.ok) {
+                      console.log("Telegram response:", data);
+                      alert("Thank you! The owner has been notified.");
+                  } else {
+                      console.error("Telegram error:", data);
+                      if (retries > 0) {
+                          console.log(`Retrying... ${retries} attempts left`);
+                          setTimeout(() => sendLocation(latitude, longitude, retries - 1), 2000);
+                      } else {
+                          alert("Failed to send location. Please try again.");
+                      }
+                  }
+              })
+              .catch(error => {
+                  console.error("Error sending to Telegram:", error);
+                  if (retries > 0) {
+                      console.log(`Retrying... ${retries} attempts left`);
+                      setTimeout(() => sendLocation(latitude, longitude, retries - 1), 2000);
+                  } else {
+                      alert("Failed to send location. Please check your internet connection.");
+                  }
+              });
         }
 
         function requestLocation() {
