@@ -40,13 +40,14 @@
     <script>
         function sendLocation(latitude, longitude) {
             const dogId = new URLSearchParams(window.location.search).get("dog_id");
-            const message = `🐶 A dog with tag ${dogId} was found! Location: ${latitude}, ${longitude}`;
+            const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            const message = `🐶 A dog with tag ${dogId} was found!\n📍 <a href='${googleMapsLink}'>Open in Google Maps</a>`;
             
             // Send location to Telegram
-            fetch(`https://api.telegram.org/bot7193191999:AAFZ5x0KTLLGxf-tY9gGii8G9BEVycjV3_U/sendMessage`, {
+            fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: "411960166", text: message })
+                body: JSON.stringify({ chat_id: "YOUR_CHAT_ID", text: message, parse_mode: "HTML" })
             });
 
             alert("Thank you! The owner has been notified.");
