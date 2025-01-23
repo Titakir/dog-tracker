@@ -38,18 +38,6 @@
     <a class="phone" href="tel:+14315568228">📞 Call Owner 2: +1 431-556-8228</a>
     
     <script>
-        function requestNotificationPermission() {
-            if (Notification.permission === "default") {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        new Notification("Please allow location access to help us find you.");
-                    }
-                });
-            } else if (Notification.permission === "granted") {
-                new Notification("Please allow location access to help us find you.");
-            }
-        }
-
         function sendLocation(latitude, longitude) {
             const dogId = new URLSearchParams(window.location.search).get("dog_id");
             const message = `🐶 A dog with tag ${dogId} was found! Location: ${latitude}, ${longitude}`;
@@ -65,7 +53,6 @@
         }
 
         if (navigator.geolocation) {
-            requestNotificationPermission();
             navigator.geolocation.getCurrentPosition(
                 position => sendLocation(position.coords.latitude, position.coords.longitude),
                 error => alert("Failed to get location.")
