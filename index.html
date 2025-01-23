@@ -1,36 +1,64 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Нашёл собаку?</title>
+    <title>Lost Dog Found</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .phone {
+            display: block;
+            font-size: 20px;
+            margin: 10px 0;
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Вы нашли собаку!</h1>
-    <p>Сейчас мы передадим владельцу её местоположение.</p>
-
+    <h1>You found a lost dog!</h1>
+    <p>Please contact the owner using the numbers below.</p>
+    
+    <!-- Dog Image -->
+    <img src="dog.jpg" alt="Lost Dog">
+    
+    <!-- Phone numbers -->
+    <a class="phone" href="tel:+14315569318">📞 Call Owner 1: +1 431-556-9318</a>
+    <a class="phone" href="tel:+14315568228">📞 Call Owner 2: +1 431-556-8228</a>
+    
     <script>
         function sendLocation(latitude, longitude) {
             const dogId = new URLSearchParams(window.location.search).get("dog_id");
-            const message = `🐶 Собака с брелком ${dogId} найдена! Координаты: ${latitude}, ${longitude}`;
+            const message = `🐶 A dog with tag ${dogId} was found! Location: ${latitude}, ${longitude}`;
             
-            // Отправка в Telegram
+            // Send location to Telegram
             fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ chat_id: "YOUR_CHAT_ID", text: message })
             });
 
-            alert("Спасибо! Владельцу отправлено уведомление.");
+            alert("Thank you! The owner has been notified.");
         }
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 position => sendLocation(position.coords.latitude, position.coords.longitude),
-                error => alert("Не удалось получить местоположение.")
+                error => alert("Failed to get location.")
             );
         } else {
-            alert("Ваш браузер не поддерживает определение местоположения.");
+            alert("Your browser does not support geolocation.");
         }
     </script>
 </body>
