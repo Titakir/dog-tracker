@@ -44,10 +44,10 @@
             const message = `🐶 A dog with tag ${dogId} was found!\n📍 [Open in Google Maps](${googleMapsLink})`;
             
             // Send location to Telegram
-            fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage`, {
+            fetch(`https://api.telegram.org/bot7193191999:AAFZ5x0KTLLGxf-tY9gGii8G9BEVycjV3_U/sendMessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: "YOUR_CHAT_ID", text: message, parse_mode: "Markdown" })
+                body: JSON.stringify({ chat_id: "411960166", text: message, parse_mode: "Markdown" })
             });
 
             alert("Thank you! The owner has been notified.");
